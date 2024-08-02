@@ -14,7 +14,12 @@ const sendBirthdayEmail = (email, username) => {
     from: emailConfig.EMAIL,
     to: email,
     subject: "Happy Birthday!",
-    text: `Dear ${username},\n\nWishing you a very happy birthday! Have a wonderful day!\n\nBest Regards,\nYour Company`,
+    text: `Happy Birthday ${username} 🎉🎂\n\nWe hope you have a fantastic day filled with joy and celebration!\n\nBest regards,\nYour Company`,
+    html: `
+            <h2>Happy Birthday ${username} 🎉🎂</h2>
+            <p>We hope you have a fantastic day filled with joy and celebration!</p>
+            <p>Best regards, <br> Your Company</p>
+        `,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
