@@ -14,25 +14,25 @@ function setupCronJob() {
     console.log("Today's date:", todayFormatted);
 
     try {
+      //dob is stored as YYYY-MM-DD, extract MM-DD
       const birthdayUsers = await User.aggregate([
         {
           $project: {
-            username: 1,
+            name: 1,
             email: 1,
-            dob: {
-              $dateToString: {
-                format: "%m-%d",
-                date: { $dateFromString: { dateString: "$dob" } },
-              },
+            dob: 1,
+            dobMonthDay: {
+              $substr: ["$dob", 5, 5],
             },
           },
         },
         {
           $match: {
-            dob: todayFormatted,
+            dobMonthDay: todayFormatted,
           },
         },
       ]);
+
       console.log("Birthday users:", birthdayUsers);
 
       if (birthdayUsers.length === 0) {
@@ -40,7 +40,7 @@ function setupCronJob() {
       } else {
         birthdayUsers.forEach((user) => {
           console.log("Sending email to:", user.email);
-          sendBirthdayEmail(user.email, user.username);
+          sendBirthdayEmail(user.email, user.name);
         });
       }
     } catch (error) {
