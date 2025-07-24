@@ -1,4 +1,4 @@
-# 🎉 Your Birthday, Remembered
+# Your Birthday, Remembered
 
 A simple birthday reminder service that sends heartfelt birthday emails to users on their special day.
 
