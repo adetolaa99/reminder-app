@@ -4,21 +4,19 @@ A simple birthday reminder service that sends heartfelt birthday emails to users
 
 ## Overview
 
-This project allows users to submit their name, email, and date of birth. On their birthday, the system automatically sends them a warm, personalized email with a birthday greeting and celebration GIF.
+This project allows users to submit their name, email and date of birth. On their birthday, the system automatically sends them a warm, personalized email with a birthday greeting and celebration GIF.
 
 ## Features
 
 - User-friendly form for collecting birthday details
-- Stores name, email, and date of birth
+- Stores name, email and date of birth in the database
 - Sends personalized HTML email with text and image
-- Fully automated birthday reminders
 - Styled HTML emails with emojis and GIFs
-- Built using **NestJS** and **NodeMailer**
+- Fully automated birthday reminders
 
 ## Tech Stack
 
 - **Backend**: NestJS, TypeScript
 - **Frontend**: HTML, CSS, JS
+- **Database**: MongoDB
 - **Email Service**: Nodemailer
-
-Built with ❤️ by **Adetola**
