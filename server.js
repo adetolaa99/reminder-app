@@ -13,7 +13,7 @@ require("dotenv").config();
 connectDB();
 
 const app = express();
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 
 //Security middleware
 app.use(helmet());

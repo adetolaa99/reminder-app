@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     today.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-      this.setCustomValidity("Please select a date that is today or earlier");
-      showError("Please select a date that is today or earlier");
+      this.setCustomValidity("Please select a date that is earlier");
+      showError("Please select a date that is earlier");
     } else {
       this.setCustomValidity("");
       const existingErrors = form.querySelectorAll(".error-message");
