@@ -1,38 +1,107 @@
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("birthdayForm");
   const submitBtn = form.querySelector('input[type="submit"]');
+  const dobInput = document.getElementById("dob");
 
-  // Set max date to today
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("dob").setAttribute("max", today);
+  //set max date to today
+  const today = new Date();
+  const todayString = today.toISOString().split("T")[0];
+  dobInput.setAttribute("max", todayString);
 
-  // Add loading state
+  //mobile date validation
+  dobInput.addEventListener("change", function () {
+    const selectedDate = new Date(this.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      this.setCustomValidity("Please select a date that is today or earlier");
+      showError("Please select a date that is today or earlier");
+    } else {
+      this.setCustomValidity("");
+      const existingErrors = form.querySelectorAll(".error-message");
+      existingErrors.forEach((msg) => msg.remove());
+    }
+  });
+
+  //mobile form validation
+  function validateForm(data) {
+    const errors = [];
+
+    if (!data.name.trim()) {
+      errors.push("Name is required");
+    } else if (data.name.trim().length < 1 || data.name.trim().length > 100) {
+      errors.push("Name must be between 1 and 100 characters");
+    }
+
+    if (!data.email.trim()) {
+      errors.push("Email is required");
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      errors.push("Please enter a valid email address");
+    }
+
+    if (!data.dob) {
+      errors.push("Date of birth is required");
+    } else {
+      const dobDate = new Date(data.dob);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (dobDate > today) {
+        errors.push("Date of birth cannot be in the future!");
+      }
+    }
+
+    return errors;
+  }
+
+  //loading state
   function setLoading(isLoading) {
     submitBtn.disabled = isLoading;
     submitBtn.value = isLoading ? "Submitting..." : "Submit";
+
+    if (isLoading) {
+      submitBtn.style.backgroundColor = "#ccc";
+    } else {
+      submitBtn.style.backgroundColor = "#cc0052";
+    }
   }
 
-  // Show success message
+  //success message
   function showSuccess(message) {
+    const existingMessages = form.querySelectorAll(
+      ".success-message, .error-message"
+    );
+    existingMessages.forEach((msg) => msg.remove());
+
     const successDiv = document.createElement("div");
     successDiv.className = "success-message";
     successDiv.textContent = message;
     form.appendChild(successDiv);
 
     setTimeout(() => {
-      successDiv.remove();
+      if (successDiv.parentNode) {
+        successDiv.remove();
+      }
     }, 5000);
   }
 
-  // Show error message
+  //error message
   function showError(message) {
+    const existingMessages = form.querySelectorAll(
+      ".success-message, .error-message"
+    );
+    existingMessages.forEach((msg) => msg.remove());
+
     const errorDiv = document.createElement("div");
     errorDiv.className = "error-message";
     errorDiv.textContent = message;
     form.appendChild(errorDiv);
 
     setTimeout(() => {
-      errorDiv.remove();
+      if (errorDiv.parentNode) {
+        errorDiv.remove();
+      }
     }, 5000);
   }
 
@@ -40,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     setLoading(true);
 
-    // Remove any existing messages
     const existingMessages = form.querySelectorAll(
       ".success-message, .error-message"
     );
@@ -48,6 +116,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+
+    //validation
+    const validationErrors = validateForm(data);
+    if (validationErrors.length > 0) {
+      showError(validationErrors[0]);
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/users", {
@@ -58,17 +134,27 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-
       if (response.ok) {
-        showSuccess("Successful! You'll receive an email on your birthday🎉 Remember to check your mail :)");
+        const result = await response.json();
+        showSuccess(
+          "You've successfully joined our Birthday Club! 🎉 Remember to check your mail :)"
+        );
         e.target.reset();
       } else {
-        showError(result.error || "An error occurred. Please try again!");
+        let errorMessage = "An error occurred... Please try again!";
+
+        try {
+          const result = await response.json();
+          errorMessage = result.error || errorMessage;
+        } catch (parseError) {
+          console.error("Error parsing response:", parseError);
+        }
+
+        showError(errorMessage);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      showError("Network error. Please check your connection and try again!");
+      showError("A network error occured... Please try again!");
     } finally {
       setLoading(false);
     }

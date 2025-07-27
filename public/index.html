@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
     <title>Let's celebrate your birthday with you!</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
@@ -20,24 +21,30 @@
       </div>
       <h2>Let's get to know you</h2>
       <form id="birthdayForm">
-        <label for="name">Name:</label><br />
+        <label for="name">Name:</label>
         <input
           type="text"
           id="name"
           name="name"
-          placeholder="what is your name?"
+          placeholder="What is your name?"
           required
+          autocomplete="name"
+          inputmode="text"
         />
-        <label for="email">Email:</label><br />
+
+        <label for="email">Email:</label>
         <input
           type="email"
           id="email"
           name="email"
-          placeholder="your email address"
+          placeholder="Your email address?"
           required
+          autocomplete="email"
+          inputmode="email"
         />
-        <label for="dob">Date of Birth:</label><br />
-        <input type="date" id="dob" name="dob" required />
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required autocomplete="bday" />
         <input type="submit" value="Submit" />
       </form>
     </div>

@@ -3,7 +3,7 @@ const User = require("../models/userModel.js");
 //email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-//name validation (letters, spaces, hyphens, apostrophes, 1-100 chars)
+//name validation
 const nameRegex = /^[a-zA-Z\s\-']{1,100}$/;
 
 const addUser = async (req, res) => {
@@ -44,7 +44,7 @@ const addUser = async (req, res) => {
   if (dobDate < minDate) {
     return res
       .status(400)
-      .json({ error: "Please enter a valid date of birth" });
+      .json({ error: "Please enter a valid date of birth!" });
   }
 
   try {
@@ -54,7 +54,7 @@ const addUser = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.status(400).json({ error: "Email already exists!" });
     }
 
     const user = new User({
@@ -70,7 +70,7 @@ const addUser = async (req, res) => {
     });
   } catch (error) {
     console.error("Error adding user:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "An error occured" });
   }
 };
 

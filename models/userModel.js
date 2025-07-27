@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       match: [
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        "Please enter a valid email address",
+        "Please enter a valid email address!",
       ],
     },
     dob: {
@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema(
               )
           );
         },
-        message: "Please enter a valid date of birth",
+        message: "Please enter a valid date of birth!",
       },
     },
   },
@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema(
 
 //indexes
 userSchema.index({ name: 1 });
-userSchema.index({ email: 1 });
+userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ dob: 1 });
 
 const User = mongoose.model("User", userSchema);

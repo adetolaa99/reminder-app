@@ -13,9 +13,9 @@ const sendBirthdayEmail = (email, name) => {
   const firstName = name.split(" ")[0];
 
   const mailOptions = {
-    from: `"Adetola" <${emailConfig.EMAIL}>`,
+    from: `"Your Birthday, Remembered" <${emailConfig.EMAIL}>`,
     to: email,
-    subject: "🎉 Happy Birthday!",
+    subject: "Happy Birthday!",
     text: `Happy Birthday ${firstName}!\n\nI hope your special day is filled with joy, laughter and unforgettable memories. You deserve a wonderful day and I'm so glad I get to be part of it, even in a small way.\n\nEnjoy every moment and cheers to the year ahead!\n\nWith warm wishes,\nAdetola\nYour Birthday, Remembered`,
     html: `
       <!DOCTYPE html>
