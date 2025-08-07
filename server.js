@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const cors = require("cors");
+const fetch = require("node-fetch");
 
 const UserRouter = require("./routes/userRoutes.js");
 const path = require("path");
@@ -23,12 +24,13 @@ app.use(cors());
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, //15 minutes
   max: 100,
-  message: "You've sent too many requests from this IP... please try again later",
+  message:
+    "You've sent too many requests from this IP... please try again later",
 });
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, 
+  max: 10,
   message: { error: "Too many API requests... please try again later" },
 });
 
@@ -43,6 +45,25 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", UserRouter);
 
+//keep-alive endpoint for render
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
+//ping every 14 minutes to prevent sleeping
+if (process.env.NODE_ENV === "production") {
+  setInterval(() => {
+    const url = process.env.RENDER_URL || `http://localhost:${PORT}`;
+    fetch(`${url}/health`).catch((err) =>
+      console.log("Keep-alive ping failed:", err)
+    );
+  }, 14 * 60 * 1000);
+}
+
 //Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -56,5 +77,7 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+  console.log("Initializing cron jobs...");
   setupCronJob();
+  console.log("Server startup complete");
 });

@@ -17,7 +17,7 @@ const sendBirthdayEmail = (email, name) => {
       from: `"Your Birthday, Remembered" <${emailConfig.EMAIL}>`,
       to: email,
       subject: "Happy Birthday!",
-      text: `Happy Birthday ${firstName}!\n\nI hope your special day is filled with joy, laughter and unforgettable memories. You deserve a wonderful day and I'm so glad I get to be part of it, even in a small way.\n\nEnjoy every moment and cheers to the year ahead!\n\nWith warm wishes,\nAdetola\nYour Birthday, Remembered`,
+      text: `Happy Birthday ${firstName}!\n\nI hope your special day is filled with joy, laughter and unforgettable memories. You deserve a wonderful day and I'm so glad I get to be part of it, even in a small way :)\n\nEnjoy every moment and cheers to the year ahead!\n\nWith warm wishes,\nAdetola\nYour Birthday, Remembered`,
       html: `
         <!DOCTYPE html>
         <html lang="en">
@@ -37,7 +37,7 @@ const sendBirthdayEmail = (email, name) => {
 
             <!-- Message -->
             <p style="font-size: 16px; color: #555555; line-height: 1.6;">
-              I hope your special day is filled with joy, laughter and unforgettable memories ❤️. You deserve a wonderful day and I'm so glad I get to be part of it, even in a small way.
+              I hope your special day is filled with joy, laughter and unforgettable memories ❤️. You deserve a wonderful day and I'm so glad I get to be part of it, even in a small way :)
             </p>
 
             <p style="font-size: 16px; color: #555555; line-height: 1.6;">
@@ -50,7 +50,7 @@ const sendBirthdayEmail = (email, name) => {
             <!-- Footer -->
             <div style="font-size: 14px; color: #999999; line-height: 1.5;">
               With warm wishes,<br/>
-              <strong>Adetola🎀</strong><br/>
+              <strong>Adetola 🎀</strong><br/>
               <em>Your Birthday, Remembered</em>
             </div>
         </div>

@@ -78,4 +78,15 @@ UserRouter.post("/test-email", async (req, res) => {
   }
 });
 
+//health check for cron job
+UserRouter.get("/cron-status", (req, res) => {
+  const now = new Date();
+  res.json({
+    message: "Cron service is active",
+    serverTime: now.toISOString(),
+    serverTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    formattedDate: `${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`,
+  });
+});
+
 module.exports = UserRouter;
