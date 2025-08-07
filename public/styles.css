@@ -78,6 +78,52 @@ input[type="date"] {
   display: block;
   clear: both;
   min-height: 48px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white;
+  line-height: normal;
+}
+
+input[type="date"] {
+  position: relative;
+  background: white;
+  color: #4d004d;
+  padding-right: 40px;
+}
+
+/*webkit browsers*/
+input[type="date"]::-webkit-datetime-edit {
+  padding: 0;
+  color: #4d004d;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  color: #4d004d;
+  padding: 0 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #4d004d;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  color: #4d004d;
+  opacity: 1;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  filter: invert(0.3) sepia(1) saturate(5) hue-rotate(315deg);
 }
 
 input[type="text"]:focus,
@@ -167,6 +213,32 @@ input[type="submit"]:disabled {
     font-size: 16px;
     margin-bottom: 15px;
     min-height: 48px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: white;
+    border: 2px solid #ffb3cc;
+    border-radius: 6px;
+  }
+
+  input[type="date"] {
+    padding: 12px;
+    padding-right: 40px;
+    height: 48px;
+    line-height: 1.2;
+    position: relative;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    filter: invert(0.3) sepia(1) saturate(5) hue-rotate(315deg);
   }
 
   label {
