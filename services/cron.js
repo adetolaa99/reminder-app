@@ -3,18 +3,21 @@ const User = require("../models/userModel.js");
 const { sendBirthdayEmail } = require("../services/emailService.js");
 
 function setupCronJob() {
-  cron.schedule("1 0 * * *", async () => {
+  cron.schedule("1 23 * * *", async () => {
     console.log(
       "Daily birthday cron job running at:",
       new Date().toISOString()
     );
 
-    const today = new Date();
-    const todayFormatted = `${String(today.getMonth() + 1).padStart(
+    //create date in nigerian timezone
+    const now = new Date();
+    const nigerianTime = new Date(now.getTime() + 1 * 60 * 60 * 1000);
+    const todayFormatted = `${String(nigerianTime.getMonth() + 1).padStart(
       2,
       "0"
-    )}-${String(today.getDate()).padStart(2, "0")}`;
+    )}-${String(nigerianTime.getDate()).padStart(2, "0")}`;
 
+    console.log("Nigerian time:", nigerianTime.toISOString());
     console.log("Checking for birthdays on:", todayFormatted);
 
     try {
@@ -63,7 +66,7 @@ function setupCronJob() {
     }
   });
 
-  console.log("Birthday cron job scheduled daily");
+  console.log("Birthday cron job scheduled for 12AM WAT");
 }
 
 module.exports = setupCronJob;
