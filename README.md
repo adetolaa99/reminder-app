@@ -16,7 +16,7 @@ This project allows users to submit their name, email and date of birth. On thei
 
 ## Tech Stack
 
-- **Backend**: Javascript
+- **Backend**: Node.JS
 - **Frontend**: HTML, CSS, JS
 - **Database**: MongoDB
 - **Email Service**: Nodemailer
