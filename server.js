@@ -7,7 +7,6 @@ const fetch = require("node-fetch");
 
 const UserRouter = require("./routes/userRoutes.js");
 const path = require("path");
-const setupCronJob = require("./services/cron.js");
 const { connectDB } = require("./config/dbConfig.js");
 
 require("dotenv").config();
@@ -16,11 +15,9 @@ connectDB();
 const app = express();
 app.set("trust proxy", 1);
 
-//Security middleware
 app.use(helmet());
 app.use(cors());
 
-//Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, //15 minutes
   max: 100,
@@ -37,7 +34,6 @@ const apiLimiter = rateLimit({
 app.use(limiter);
 app.use("/api", apiLimiter);
 
-//Body parsing middleware
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -45,7 +41,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/users", UserRouter);
 
-//keep-alive endpoint for render
 app.get("/health", (req, res) => {
   res.json({
     status: "ok",
@@ -54,17 +49,6 @@ app.get("/health", (req, res) => {
   });
 });
 
-//ping every 14 minutes to prevent sleeping
-if (process.env.NODE_ENV === "production") {
-  setInterval(() => {
-    const url = process.env.RENDER_URL || `http://localhost:${PORT}`;
-    fetch(`${url}/health`).catch((err) =>
-      console.log("Keep-alive ping failed:", err)
-    );
-  }, 14 * 60 * 1000);
-}
-
-//Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "An error occurred! Please try again" });
@@ -77,7 +61,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  console.log("Initializing cron jobs...");
-  setupCronJob();
   console.log("Server startup complete");
 });

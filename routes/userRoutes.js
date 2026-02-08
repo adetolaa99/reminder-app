@@ -7,16 +7,19 @@ const UserRouter = express.Router();
 
 UserRouter.post("/", addUser);
 
-//test route to manually trigger birthday check
-UserRouter.get("/test-birthday", async (req, res) => {
-  try {
-    const today = new Date();
-    const todayFormatted = `${String(today.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(today.getDate()).padStart(2, "0")}`;
+UserRouter.get("/trigger-birthdays", async (req, res) => {
+  const { secret } = req.query;
 
-    console.log("Testing for date:", todayFormatted);
+  if (secret !== process.env.CRON_SECRET) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const now = new Date();
+    const nigerianTime = new Date(now.getTime() + 1 * 60 * 60 * 1000);
+    const todayFormatted = `${String(nigerianTime.getMonth() + 1).padStart(2, "0")}-${String(nigerianTime.getDate()).padStart(2, "0")}`;
+
+    console.log(`Cron triggered! Nigerian Date: ${todayFormatted}`);
 
     const birthdayUsers = await User.aggregate([
       {
@@ -24,38 +27,36 @@ UserRouter.get("/test-birthday", async (req, res) => {
           name: 1,
           email: 1,
           dob: 1,
-          dobMonthDay: {
-            $substr: ["$dob", 5, 5], //extract MM-DD from YYYY-MM-DD
-          },
+          dobMonthDay: { $substr: ["$dob", 5, 5] },
         },
       },
-      {
-        $match: {
-          dobMonthDay: todayFormatted,
-        },
-      },
+      { $match: { dobMonthDay: todayFormatted } },
     ]);
 
-    console.log("Found birthday users:", birthdayUsers);
-
-    if (birthdayUsers.length > 0) {
-      birthdayUsers.forEach((user) => {
-        sendBirthdayEmail(user.email, user.name);
-      });
+    const results = [];
+    for (const user of birthdayUsers) {
+      try {
+        await sendBirthdayEmail(user.email, user.name);
+        results.push({ email: user.email, status: "sent" });
+      } catch (err) {
+        results.push({
+          email: user.email,
+          status: "failed",
+          error: err.message,
+        });
+      }
     }
 
     res.json({
-      message: "Birthday check completed",
-      todayFormatted,
-      birthdayUsers,
+      message: "Completed!",
+      count: birthdayUsers.length,
+      details: results,
     });
   } catch (error) {
-    console.error("Error in test:", error);
     res.status(500).json({ error: error.message });
   }
 });
 
-//test route to get all users
 UserRouter.get("/all", async (req, res) => {
   try {
     const users = await User.find({});
@@ -66,7 +67,6 @@ UserRouter.get("/all", async (req, res) => {
   }
 });
 
-//test route to send email manually
 UserRouter.post("/test-email", async (req, res) => {
   try {
     const { email, name } = req.body;
@@ -78,7 +78,6 @@ UserRouter.post("/test-email", async (req, res) => {
   }
 });
 
-//health check for cron job
 UserRouter.get("/cron-status", (req, res) => {
   const now = new Date();
   res.json({

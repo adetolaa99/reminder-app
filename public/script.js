@@ -3,12 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const submitBtn = form.querySelector('input[type="submit"]');
   const dobInput = document.getElementById("dob");
 
-  //set max date to today
   const today = new Date();
   const todayString = today.toISOString().split("T")[0];
   dobInput.setAttribute("max", todayString);
 
-  //mobile date validation
   dobInput.addEventListener("change", function () {
     const selectedDate = new Date(this.value);
     const today = new Date();
@@ -24,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  //mobile form validation
   function validateForm(data) {
     const errors = [];
 
@@ -55,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return errors;
   }
 
-  //loading state
   function setLoading(isLoading) {
     submitBtn.disabled = isLoading;
     submitBtn.value = isLoading ? "Submitting..." : "Submit";
@@ -67,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  //success message
   function showSuccess(message) {
     const existingMessages = form.querySelectorAll(
       ".success-message, .error-message"
@@ -86,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 5000);
   }
 
-  //error message
   function showError(message) {
     const existingMessages = form.querySelectorAll(
       ".success-message, .error-message"
@@ -117,7 +111,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    //validation
     const validationErrors = validateForm(data);
     if (validationErrors.length > 0) {
       showError(validationErrors[0]);

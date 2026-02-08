@@ -1,15 +1,12 @@
 const User = require("../models/userModel.js");
 
-//email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-//name validation
 const nameRegex = /^[a-zA-Z\s\-']{1,100}$/;
 
 const addUser = async (req, res) => {
   const { name, email, dob } = req.body;
 
-  //input validation
   if (!name || !email || !dob) {
     return res.status(400).json({ error: "All fields are required!" });
   }
@@ -26,7 +23,6 @@ const addUser = async (req, res) => {
       .json({ error: "Please enter a valid email address!" });
   }
 
-  //date validation
   const dobDate = new Date(dob);
   const today = new Date();
   const minDate = new Date(
@@ -48,7 +44,6 @@ const addUser = async (req, res) => {
   }
 
   try {
-    //check for duplicate emails
     const existingUser = await User.findOne({
       email: email.toLowerCase(),
     });

@@ -1,3 +1,4 @@
+/*
 const cron = require("node-cron");
 const User = require("../models/userModel.js");
 const { sendBirthdayEmail } = require("../services/emailService.js");
@@ -6,15 +7,14 @@ function setupCronJob() {
   cron.schedule("1 23 * * *", async () => {
     console.log(
       "Daily birthday cron job running at:",
-      new Date().toISOString()
+      new Date().toISOString(),
     );
 
-    //create date in nigerian timezone
     const now = new Date();
     const nigerianTime = new Date(now.getTime() + 1 * 60 * 60 * 1000);
     const todayFormatted = `${String(nigerianTime.getMonth() + 1).padStart(
       2,
-      "0"
+      "0",
     )}-${String(nigerianTime.getDate()).padStart(2, "0")}`;
 
     console.log("Nigerian time:", nigerianTime.toISOString());
@@ -41,7 +41,7 @@ function setupCronJob() {
 
       console.log(
         `Found ${birthdayUsers.length} birthday users:`,
-        birthdayUsers.map((u) => u.email)
+        birthdayUsers.map((u) => u.email),
       );
 
       if (birthdayUsers.length === 0) {
@@ -56,7 +56,7 @@ function setupCronJob() {
             console.error(
               "Failed to send birthday email to:",
               user.email,
-              emailError
+              emailError,
             );
           }
         }
@@ -70,3 +70,4 @@ function setupCronJob() {
 }
 
 module.exports = setupCronJob;
+*/
