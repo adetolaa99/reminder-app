@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
               new Date(
                 today.getFullYear() - 120,
                 today.getMonth(),
-                today.getDate()
+                today.getDate(),
               )
           );
         },
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 userSchema.index({ name: 1 });
