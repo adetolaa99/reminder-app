@@ -3,10 +3,16 @@ const emailConfig = require("../config/emailConfig.js");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: emailConfig.EMAIL,
     pass: emailConfig.EMAIL_PASSWORD,
   },
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 const sendBirthdayEmail = (email, name) => {
